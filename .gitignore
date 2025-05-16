@@ -37,4 +37,8 @@ build/
 /ut-zap50k-images-square
 /ut-zap50k-images-square-small
 
+# Trainingsdaten ignorieren
 chest_xray/
+train/
+val/
+test/
