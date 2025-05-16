@@ -1,19 +1,24 @@
-# Usage
-# docker build -t mosazhaw/djl-pneumoniaDetection-classification .
-# docker run --name djl-pneumoniaDetection-classification -p 8080:8080 -d mosazhaw/djl-pneumoniaDetection-classification
-
+# Base Image
 FROM openjdk:21-jdk-slim
 
-# Copy Files
-WORKDIR /usr/src/app
-COPY models models
-COPY src src
-COPY .mvn .mvn
+#  Arbeitsverzeichnis
+WORKDIR /app
+
+#  Copy project metadata
 COPY pom.xml mvnw ./
+COPY .mvn .mvn
 
-# Install
-RUN ./mvnw -Dmaven.test.skip=true package
+#  Vorbereitung
+RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
-# Docker Run Command
+#  Copy Quellcode
+COPY src src
+COPY models models
+COPY src/main/resources src/main/resources
+
+#  Build
+RUN ./mvnw clean package -DskipTests
+
+#  Run
 EXPOSE 8080
-CMD ["java","-jar","/usr/src/app/target/playground-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/playground-0.0.1-SNAPSHOT.jar"]

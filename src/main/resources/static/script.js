@@ -31,17 +31,30 @@ function checkFiles(files) {
 
             const top = predictions.reduce((a, b) => a.probability > b.probability ? a : b);
 
-            let resultHtml = `<p><strong>➡️ Vorhersage: <span class="highlight">${top.className.replaceAll("_", " ")}</span></strong></p>`;
-            resultHtml += "<ul class='list-group'>";
+            // ✨ Schöne Ausgabe mit Fortschrittsbalken & Farben
+            let resultHtml = `
+              <p><strong>➡️ Vorhersage: <span class="highlight">${top.className.replaceAll("_", " ")}</span></strong></p>
+              <div class="list-group">`;
+
             predictions.forEach(p => {
                 const label = p.className.replaceAll("_", " ");
                 const percent = (p.probability * 100).toFixed(1);
-                resultHtml += `<li class="list-group-item d-flex justify-content-between">
-                                <span>${label}</span>
-                                <span class="badge badge-secondary">${percent}%</span>
-                               </li>`;
+                const isTop = p.className === top.className;
+                const barWidth = Math.max(5, Math.round(p.probability * 100));
+
+                resultHtml += `
+                  <div class="list-group-item bg-white text-dark d-flex flex-column">
+                    <div class="d-flex justify-content-between mb-1">
+                      <strong style="color: ${isTop ? '#4caf50' : '#111'}">${label}</strong>
+                      <span class="badge ${isTop ? 'badge-success' : 'badge-secondary'}">${percent}%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                      <div class="progress-bar ${isTop ? 'bg-success' : 'bg-secondary'}" role="progressbar" style="width: ${barWidth}%"></div>
+                    </div>
+                  </div>`;
             });
-            resultHtml += "</ul>";
+
+            resultHtml += `</div>`;
             answer.innerHTML = resultHtml;
 
             // Spinner anzeigen
@@ -73,6 +86,7 @@ Erstelle einen HTML-Text in zwei gut strukturierten Abschnitten:
                 .then(text => {
                     console.log("✅ Gemini-Antwort erhalten");
                     document.getElementById("loading-spinner")?.remove();
+
                     const explainDiv = document.createElement('div');
                     explainDiv.className = 'mt-4';
                     explainDiv.innerHTML = `<h6>Analyse durch Gemini</h6>${text}`;
@@ -98,6 +112,7 @@ Erstelle einen HTML-Text in zwei gut strukturierten Abschnitten:
                 })
                 .catch(err => {
                     console.error("❌ Fehler bei Gemini-Antwort:", err);
+                    document.getElementById("loading-spinner")?.remove();
                 });
         })
         .catch(error => {

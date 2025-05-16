@@ -1,2 +1,10 @@
-/target
-/ut-zap50k-images-square
+# Vermeidet versehentlich große Dateien im Image
+target/
+*.iml
+.idea/
+chest_xray/
+train/
+test/
+val/
+*.log
+*.class
