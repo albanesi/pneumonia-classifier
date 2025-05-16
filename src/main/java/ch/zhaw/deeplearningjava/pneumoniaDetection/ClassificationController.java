@@ -1,4 +1,4 @@
-package ch.zhaw.deeplearningjava.footwear;
+package ch.zhaw.deeplearningjava.pneumoniaDetection;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

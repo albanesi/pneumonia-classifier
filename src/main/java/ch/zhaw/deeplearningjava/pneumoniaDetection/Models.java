@@ -10,12 +10,19 @@
  * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package ch.zhaw.deeplearningjava.footwear;
+package ch.zhaw.deeplearningjava.pneumoniaDetection;
 
 import ai.djl.Model;
 import ai.djl.basicmodelzoo.cv.classification.ResNetV1;
+import ai.djl.modality.Classifications;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.transform.Resize;
+import ai.djl.modality.cv.transform.ToTensor;
+import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Block;
+import ai.djl.translate.Pipeline;
+import ai.djl.translate.Translator;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -27,14 +34,14 @@ import java.util.List;
 public final class Models {
 
     // the number of classification labels: boots, sandals, shoes, slippers
-    public static final int NUM_OF_OUTPUT = 4;
+    public static final int NUM_OF_OUTPUT = 3;
 
     // the height and width for pre-processing of the image
     public static final int IMAGE_HEIGHT = 100;
     public static final int IMAGE_WIDTH = 100;
 
     // the name of the model
-    public static final String MODEL_NAME = "shoeclassifier";
+    public static final String MODEL_NAME = "pneumonia-detection-model";
 
     private Models() {}
 
@@ -62,4 +69,16 @@ public final class Models {
             writer.write(String.join("\n", synset));
         }
     }
+
+    public static Translator<Image, Classifications> getTranslator() {
+    Pipeline pipeline = new Pipeline();
+    pipeline.add(new Resize(IMAGE_WIDTH, IMAGE_HEIGHT));
+    pipeline.add(new ToTensor());
+
+    return ImageClassificationTranslator.builder()
+            .setPipeline(pipeline)
+            .optApplySoftmax(true)
+            .optSynsetArtifactName("synset.txt")
+            .build();
+}
 }

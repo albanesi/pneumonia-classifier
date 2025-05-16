@@ -36,3 +36,5 @@ build/
 /models
 /ut-zap50k-images-square
 /ut-zap50k-images-square-small
+
+chest_xray/

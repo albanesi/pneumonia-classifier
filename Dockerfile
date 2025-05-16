@@ -1,6 +1,6 @@
 # Usage
-# docker build -t mosazhaw/djl-footwear-classification .
-# docker run --name djl-footwear-classification -p 8080:8080 -d mosazhaw/djl-footwear-classification
+# docker build -t mosazhaw/djl-pneumoniaDetection-classification .
+# docker run --name djl-pneumoniaDetection-classification -p 8080:8080 -d mosazhaw/djl-pneumoniaDetection-classification
 
 FROM openjdk:21-jdk-slim
 

@@ -1,4 +1,4 @@
-package ch.zhaw.deeplearningjava.footwear;
+package ch.zhaw.deeplearningjava.pneumoniaDetection;
 
 import ai.djl.Model;
 import ai.djl.ModelException;
